@@ -246,3 +246,26 @@ while(True):
     elif (strChoice.strip() == '4'):
         break
 ```
+## **8.0 Research of Error Handling and Pickling**
+
+When conducting research of error handling and pickling, most search results on the internet resulted in independent websites / personal blogs. These tended to be easier to understand for beginner level programmers (such as myself). The official Python documentation was useful only for looking up certain exceptions and how they are organized. The official documentation is not as beginner friendly to read. 
+
+## **9.0 Summary**
+
+Research was conducted to better understand error handling and pickling in Python. Both of these techniques are used widely to create better code. When it came to understanding these concepts, it was found that independent websites and personal blogs were easier to understand than official Python literature. 
+
+In addition, a script was created based on assignment 05-06, Lab 7-1 to showcase incorporation of error handling and pickling. This script called for the user’s input of an item and the item’s value, placed it in a list, and then appended it to a binary file (pickling) where it can then be converted back to text to read (unpickling). One of the challenges of the script was getting around the pickle.load() function as it only read 1 line. Understanding error handling was crucial to solving this issue in the script. 
+
+Although the script had only a handful of options, an improvement could be made to incorporate both error handling and pickling to more options (and functions) such as removing specific lines and having write functionality to overwrite the contents. 
+
+## **List of Works Cited**
+
+[1] “Built in Exceptions,” docs.python.org. https://docs.python.org/3/library/exceptions.html#bltin-exceptions (accessed Nov 26, 2022).
+
+[2] “8. Errors and Exceptions,” docs.python.org. https://docs.python.org/3/tutorial/errors.html (accessed Nov 28, 2022)
+
+[3] S. Van de Klundert. “Python Exceptions: An Introduction,” realpython.com. https://realpython.com/python-exceptions/ (accessed Nov 29, 2022)
+
+[4] R. Root. (2022). IT FDN 110 A Python Programming: Module 7 [Word document]. 
+
+[5] “Python Pickling,” tutorialspoint.com. https://www.tutorialspoint.com/python-pickling (accessed Nov 29, 2022)
