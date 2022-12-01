@@ -7,6 +7,7 @@ IT FDN 110 A
 Assignment 07
 
 https://github.com/trevwin/IntroToProg-Python-Mod07
+https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/README.md
 
 # **Structured Error Handling / Pickling**
 ## **1.0 Introduction**
