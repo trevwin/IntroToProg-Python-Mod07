@@ -92,3 +92,157 @@ Two functions were created based on Lab 7-1 to demonstrate this.
 ![Figure 9. PyCharm Output of Script and Binary Data](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F9.png)
 
 *Figure 9. PyCharm Output of Script and Binary Data*
+
+## **6.0 Combined Structured Error Handling and Pickling**
+
+A script was created using elements of structured error handling and pickling as seen in the above sections. The script asks for the user to input an item name, and then enter a corresponding numerical value for the item’s value in $. The list data is then stored in a binary file where it can then be retrieved. The main body of the script utilizes an outer while loop to guide the user through the menu options as previously seen in assignment 05. 
+
+![Figure 10. While Loop – Initial Main Menu](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F10.png)
+
+*Figure 10. While Loop – Initial Main Menu*
+
+As the pickle.load() function only unpickles 1 line from the binary file, a new function has to be made in order to unpickle the other lines. This function is named: read_ALLdata_from_file.   
+
+An initial attempt at this function is listed below:
+
+![Figure 11. New Function to Read all Lines of Binary Data in File](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F11.png)
+
+*Figure 11. New Function to Read all Lines of Binary Data in File*
+
+When running this function as a test, an exception error was encountered: EOFError. 
+
+![Figure 12. EOFError on read_ALLdata_from_file](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F12.png)
+
+*Figure 12. EOFError on read_ALLdata_from_file*
+
+When looking into this specific error in the Python documentation, the error description essentially describes an end of file condition [1]. This means the binary file has no more lines to load. With this information in hand, a couple of error handling blocks are built into the function in addition to some print statements as a return. This eliminates the need to print out the return of a function as the print statement is built into the return function. Only a function call will suffice. In other applications this may not be desirable, but for this purpose it is adequate. The documentation of the function was also updated to remind the user that this function has the print function built into the return statement. 
+
+![Figure 13. read_ALLdata_from_file Function with Error Handling of EOFError](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F13.png)
+
+*Figure 13. read_ALLdata_from_file Function with Error Handling of EOFError*
+
+The error handling script in demo 1, section 4.1 is then incorporated into the overall script to complete it alongside some minor quality of life additions (option to exit menu). 
+
+## **7.0 Verification of Script in PyCharm / Windows CMD**
+
+The script was run in PyCharm and Windows CMD to verify general functionality. The error exception functionality and pickling functionality of the script was verified in previous sections. 
+
+![Figure 14. PyCharm Output and Binary File](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F14.png)
+
+*Figure 14. PyCharm Output and Binary File*
+
+![Figure 15. Windows CMD Output and Binary File](https://github.com/trevwin/IntroToProg-Python-Mod07/blob/main/docs/F15.png)
+
+*Figure 15. Windows CMD Output and Binary File*
+
+## **7.1 Source Code**
+```
+# ------------------------------------------------- #
+# Title: Assignment 07
+# Description: Simple Modification of HomeInventory Script with Pickling and Error Handling
+# ChangeLog: (Who, When, What)
+# TH,11/29/2022,Created Script
+# ------------------------------------------------- #
+# -------------------DATA--------------------------------#
+# Import Other Libraries
+import pickle # imports pickle library
+
+# Global Variable Declarations
+strFileName = 'A07.dat'  # file name changed from Lab 7-1 as to not conflict with Lab 7-1 file
+lstItemValue = []
+
+# -------------------PROCESSING---------------------------#
+# Define Functions
+def save_data_to_file(file_name, list_of_data):
+    """
+    This function saves a list of data to a binary file.
+
+    :param file_name: Name of binary file (.dat format)
+    :param list_of_data: List of user data
+    :return: No return variable, this function just saves the data to the file
+    """
+
+    file = open(file_name, "ab")  # ab = a refers to append, b refers to binary
+    pickle.dump(list_of_data, file)  # pickle.dump() function means to "dump" data into the file. Pickle specific
+    file.close()
+
+def read_data_from_file(file_name):
+    """
+    This function reads 1 row of existing binary data from the binary file
+
+    :param file_name: Name of binary file
+    :return: Returns 1 row of list_of_data which is converted from binary to text
+    """
+    file = open(file_name, "rb")  # rb = r refers to read, b refers to binary
+    list_of_data = pickle.load(file)  # pickle.load() function ONLY unpickles 1 line!!
+    file.close()
+    return list_of_data
+
+def read_ALLdata_from_file(file_name):
+    """
+    This function reads all rows of existing binary data from the binary file.
+    As the function automatically returns a print statement, you only need to call the function (don't print call)
+
+    :param file_name: Name of binary file
+    :return: Returns and PRINTS all rows of list_of_data which is converted from binary to text. Call function only
+    """
+    try:
+        file = open(file_name, "rb")  # rb = r refers to read, b refers to binary
+        for row in file_name:
+            list_of_data = pickle.load(file)
+            print(list_of_data)
+    except EOFError as e:
+        file.close()
+        return print("No more contents in file!!")
+    except Exception as e:
+        file.close()
+        return print("unspecified error!")
+
+# ------------------PRESENTATION---------------------------#
+# Main Script Body
+while(True):
+    print("""
+    Menu of Options
+    1) Enter and append data to binary file
+    2) Read 1 line of existing data in binary file
+    3) Read all existing data in binary file
+    4) Exit Menu
+    Note: If you enter anything but the above options, the menu will persist
+    """)
+
+    strChoice = str(input("Which option would you like to perform? [1-4]:   "))
+    print() # line for looks
+
+# Choice 1: User Input / Append
+    if (strChoice.strip() == '1'):
+        try:
+            strName = str(input("Enter an item name: "))
+            if strName.isnumeric():
+                raise Exception("Please do not use numbers!")
+            else:
+                intValue = int(input("Enter a value ($): "))
+                lstNameValue = [intValue, strName]
+                save_data_to_file(strFileName, lstNameValue)
+                print()
+                print("Data saved as binary to:", strFileName)
+        except ValueError as e:
+            print("Please enter a number for the item's value!")
+        except Exception as e:
+            print()  # space for looks
+            print("There was a non specific error!")
+            print()  # space for looks
+            print("Built in Python error info: ")
+            print(e, sep='\n')
+
+# Choice 2: read 1 line of data
+    elif (strChoice.strip() == '2'):
+            print(read_data_from_file(strFileName))
+
+# Choice 3: read all lines of data
+    elif (strChoice.strip() == '3'):
+        read_ALLdata_from_file(strFileName) # function has built in print, removed print
+
+# Choice 4: exit and terminate program
+    elif (strChoice.strip() == '4'):
+        break
+```
